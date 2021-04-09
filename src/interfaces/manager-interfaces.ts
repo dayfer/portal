@@ -1,5 +1,3 @@
-import { RemoteMediaSession } from "../managers/remoteMediaSession";
-
 
 export interface ILocalMediaManager{
     startLocalMedia(): Promise<void>;
