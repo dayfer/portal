@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
 import { run } from './managers/mainManager';
 
-import * as _mainView from './view/mainView'
+//import * as _mainView from './view/mainView'
+import { ViewManager } from './view/mainView'
 
 //TODO: to be removed
 
@@ -41,7 +42,7 @@ function viewRoot() {
 
 document.body.appendChild(testComponent());
 document.body.appendChild(viewRoot());
-_mainView.startViews();
+//_mainView.startViews();
 
 
 run();

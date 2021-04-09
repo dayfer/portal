@@ -1,8 +1,13 @@
+export interface IViewManager{
+    startViews(): void;
+    setLocalMediaView(localStream: MediaStream): void;
+    getRemoteVideo(): HTMLMediaElement;
+}
 
 export interface ILocalMediaManager{
-    startLocalMedia(): Promise<void>;
     getLocalStream(): MediaStream;
     closeLocalMedia(): void;
+    setLocalMedia(rmm: IRemoteMediaSession): void;
 }
 
 export interface IRemoteMediaSession {
@@ -11,12 +16,13 @@ export interface IRemoteMediaSession {
     receiveCandidate(candidate: any): void;
     setRemoteVideo(video: HTMLMediaElement): void;
     injectSignalingSession(smm: ISignalingSession): void;
+    pc: RTCPeerConnection;
 }
 
 export interface ISignalingSession {
-    initialMembersHandler (members: Members): void;
-    addedMembersHandler (members: Members): void;
-    removedMembersHandler (members: Members): void;
+    onInitalMembers (members: Members): void;
+    onAddedMembers (members: Members): void;
+    onRemovedMembers (members: Members): void;
     injectRemoteMediaSession(rmm: IRemoteMediaSession): void;
     startMembers(): void;
     sendMessage(msg: Message): void;

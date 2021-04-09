@@ -1,6 +1,4 @@
-import { type } from "os";
 import { IRemoteMediaSession, ISignalingSession } from "../interfaces/manager-interfaces";
-import { RemoteMediaSession } from "./remoteMediaSession";
 
 export class SignalingSession implements ISignalingSession { 
 
@@ -8,13 +6,13 @@ export class SignalingSession implements ISignalingSession {
     static _instance: SignalingSession;
     private _drone: any;
     private _room: any;
-    private  _roomHash = 'ebf3dd';
-    private  _roomName = 'observable-' + this._roomHash;
+    private _roomHash = 'ebf3dd';
+    private _roomName = 'observable-' + this._roomHash;
     private _members:  Members = [];
 
-    public initialMembersHandler: (members: Members) => void;
-    public addedMembersHandler: (members: Members) => void;
-    public removedMembersHandler: (members: Members) => void;
+    public onInitalMembers: (members: Members) => void;
+    public onAddedMembers: (members: Members) => void;
+    public onRemovedMembers: (members: Members) => void;
 
     public injectRemoteMediaSession(rmm: IRemoteMediaSession) {
         this._remoteMediaSession = rmm;
@@ -43,9 +41,10 @@ export class SignalingSession implements ISignalingSession {
         catch (err){
             console.log( "failed to open ScaleDrone signaling service ", err);
         }
-            
-        await this._subscribe();
+          
         await this._setupRoom();
+        await this._subscribe();
+
         await this._monitorMembers();
         await this._monitorIncomingData();
 
@@ -93,7 +92,7 @@ export class SignalingSession implements ISignalingSession {
         this._room.on('members', (members: Members) => {
             console.log('SIGNALING INCOMMING -------------- members = ', members);
             this._members = members;
-            this.initialMembersHandler(members);
+            this.onInitalMembers(members);
           });
         this._room.on('member_join', (joinedMember: Member) => {
             console.log('SIGNALING INCOMMING -------------- member_join = ', joinedMember);

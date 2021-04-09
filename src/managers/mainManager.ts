@@ -1,44 +1,45 @@
 
 import { SignalingSession } from './signalingSession';
 import { LocalMediaManager } from './localMediaManager';
-import { setLocalMediaView, getRemoteVideo } from '../view/mainView';
+import { ViewManager } from '../view/mainView';
 import { RemoteMediaSession } from './remoteMediaSession';
 
 export async function run() {
     
     const signalingSession = new SignalingSession();
-    const remoteMediaSession = new RemoteMediaSession(signalingSession);
+    const remoteMediaSession = new RemoteMediaSession();
+    const localMediaManager = new LocalMediaManager();
+    const viewManager = new ViewManager();
     signalingSession.injectRemoteMediaSession(remoteMediaSession);
     remoteMediaSession.injectSignalingSession(signalingSession);
-
+    remoteMediaSession.injectLocalMediaManager(localMediaManager);
 
     console.log("SignalingSession STARTED ", signalingSession);
 
-    const localMediaManager = new LocalMediaManager();
-    await localMediaManager.startLocalMedia();
+    signalingSession.startMembers();
+    console.log("STARTED 1 ");
+    signalingSession.startSignaling();
+    console.log("STARTED 2 ");
 
-    const s = localMediaManager.getLocalStream();
-    console.log("local stream ", s);
-
-    setLocalMediaView(localMediaManager.getLocalStream());
-
-    remoteMediaSession.setRemoteVideo(getRemoteVideo());
-
-
-    await signalingSession.startMembers();
-
+    viewManager.startViews();
 
 //TODO: this below should be rewritten
-    signalingSession.initialMembersHandler = (members) => {
-        remoteMediaSession.startWebRTC(members.length > 1);};
-        signalingSession.initialMembersHandler = signalingSession.initialMembersHandler.bind(signalingSession);
+await localMediaManager.setLocalMedia(remoteMediaSession); 
+console.log("SignalingSession  localMediaManager.getLocalStream", localMediaManager.getLocalStream());
+    viewManager.setLocalMediaView(localMediaManager.getLocalStream());
+
+    signalingSession.onInitalMembers = (members) => { 
+        console.log("STARTED ");
+
+        remoteMediaSession.startWebRTC(members.length > 1);
 
 
-    signalingSession.startSignaling();
-
-    
+         
 
 
+        remoteMediaSession.setRemoteVideo(viewManager.getRemoteVideo());
+
+    };
 
 /*
     console.log('Requesting Bluetooth Device...');
@@ -55,4 +56,5 @@ export async function run() {
     });
 */
 }
+
 
