@@ -5,7 +5,6 @@ import { setLocalMediaView, getRemoteVideo } from '../view/mainView';
 import { RemoteMediaSession } from './remoteMediaSession';
 
 export async function run() {
-
     
     const signalingSession = new SignalingSession();
     const remoteMediaSession = new RemoteMediaSession(signalingSession);
