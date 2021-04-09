@@ -5,7 +5,6 @@ export class LocalMediaManager implements ILocalMediaManager{
 
     private _localStream: MediaStream;
 
-
     public async startLocalMedia() {
 
 
