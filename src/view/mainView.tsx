@@ -5,6 +5,7 @@ import { IViewManager } from '../interfaces/manager-interfaces'
 
 export class ViewManager implements IViewManager{
 
+
   public startViews(){
       ReactDOM.render(<RemoteVideo />, document.getElementById('root'));
     }

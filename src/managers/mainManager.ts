@@ -10,9 +10,11 @@ export async function run() {
     const remoteMediaSession = new RemoteMediaSession();
     const localMediaManager = new LocalMediaManager();
     const viewManager = new ViewManager();
-    signalingSession.injectRemoteMediaSession(remoteMediaSession);
-    remoteMediaSession.injectSignalingSession(signalingSession);
-    remoteMediaSession.injectLocalMediaManager(localMediaManager);
+    await signalingSession.injectRemoteMediaSession(remoteMediaSession);
+    await remoteMediaSession.injectSignalingSession(signalingSession);
+    await remoteMediaSession.injectLocalMediaManager(localMediaManager);
+
+    await localMediaManager.startLocalMedia();
 
     console.log("SignalingSession STARTED ", signalingSession);
 
@@ -23,8 +25,8 @@ export async function run() {
 
     viewManager.startViews();
 
-//TODO: this below should be rewritten
-await localMediaManager.setLocalMedia(remoteMediaSession); 
+
+ 
 console.log("SignalingSession  localMediaManager.getLocalStream", localMediaManager.getLocalStream());
     viewManager.setLocalMediaView(localMediaManager.getLocalStream());
 
@@ -40,6 +42,13 @@ console.log("SignalingSession  localMediaManager.getLocalStream", localMediaMana
         remoteMediaSession.setRemoteVideo(viewManager.getRemoteVideo());
 
     };
+
+
+
+      const localVideo = document.getElementById('localVideo') as HTMLVideoElement;
+      localVideo.addEventListener('resize', () => {
+        console.log(`Local video size changed to ${localVideo.videoWidth}x${localVideo.videoHeight}`);
+      });
 
 /*
     console.log('Requesting Bluetooth Device...');

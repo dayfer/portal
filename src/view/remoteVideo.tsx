@@ -13,3 +13,4 @@ export class RemoteVideo extends React.Component <any, any> {
     return <><video style={remoteVideoPos} id="localVideo" autoPlay></video><br></br><video style={remoteVideoPos} id="remoteVideo" autoPlay></video></>;
   }
 }
+

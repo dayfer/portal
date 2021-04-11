@@ -6,8 +6,8 @@ export interface IViewManager{
 
 export interface ILocalMediaManager{
     getLocalStream(): MediaStream;
-    closeLocalMedia(): void;
-    setLocalMedia(rmm: IRemoteMediaSession): void;
+    stopLocalMedia(): void;
+    startLocalMedia(): void;
 }
 
 export interface IRemoteMediaSession {

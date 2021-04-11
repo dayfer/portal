@@ -14,7 +14,7 @@ export class SignalingSession implements ISignalingSession {
     public onAddedMembers: (members: Members) => void;
     public onRemovedMembers: (members: Members) => void;
 
-    public injectRemoteMediaSession(rmm: IRemoteMediaSession) {
+    public async injectRemoteMediaSession(rmm: IRemoteMediaSession) {
         this._remoteMediaSession = rmm;
     }
 
@@ -54,12 +54,13 @@ export class SignalingSession implements ISignalingSession {
     }
 
     public sendMessage(msg: Message){
-        console.log("About to send this message to peer: ", msg);
+        console.log("About to send this message to peer: this :", this);
+        console.log("About to send this message to peer: this._roomName   :", this._roomName);
+        console.log("About to send this message to peer: msg :",  msg);
         this._drone.publish({
           room: this._roomName,
           msg
         });
-
     }
     private async _subscribe(){
         
@@ -108,7 +109,7 @@ export class SignalingSession implements ISignalingSession {
 
     private async _monitorIncomingData(){
         this._room.on('message', (message) => {
-            console.log('SIGNALING INCOMMING -------------- MESSAGE ');
+            console.log('SIGNALING INCOMMING -------------- MESSAGE from:  to:  :', message.member.id, this._drone.clientId);
             if (!message.member || message.member === this._drone.clientId) {
                 console.log('SIGNALING INCOMMING -------------- ERROR ', message);
                 return;

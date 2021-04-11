@@ -1,16 +1,15 @@
 import { ILocalMediaManager } from '../interfaces/manager-interfaces'
-import { RemoteMediaSession } from './remoteMediaSession';
 
 
 export class LocalMediaManager implements ILocalMediaManager{
 
-    private _localStream: MediaStream;
+    private _localStream: MediaStream = null;
 
-    public async setLocalMedia(rmm: RemoteMediaSession) {
+    public async startLocalMedia() {
 
 
         let constraints = {
-            audio: true,
+            audio: false,
             video: {
              width: { min: 400, ideal: 1920, max: 1920 },
              height: { min: 300, ideal: 1080, max: 1080 }
@@ -40,7 +39,7 @@ export class LocalMediaManager implements ILocalMediaManager{
         return this._localStream;
     }
 
-    public closeLocalMedia() {
+    public stopLocalMedia() {
         //TODO
 
     }

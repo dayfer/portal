@@ -21,10 +21,10 @@ export class RemoteMediaSession implements IRemoteMediaSession {
         this.setRemoteVideo = this.setRemoteVideo.bind(this);
         this._localDescCreated = this._localDescCreated.bind(this);
     }
-    public injectSignalingSession(smm: ISignalingSession) {
+    public async injectSignalingSession(smm: ISignalingSession) {
         this._signalingSession = smm;
     }
-    public injectLocalMediaManager(lmm: ILocalMediaManager) {
+    public async injectLocalMediaManager(lmm: ILocalMediaManager) {
         this._localMediaManager = lmm;
     }
     
@@ -91,13 +91,16 @@ export class RemoteMediaSession implements IRemoteMediaSession {
     private _sendICECandidateHandler(event: RTCPeerConnectionIceEvent){
         console.log("THIS -------------- _sendICECandidateHandler ", this);
         console.log("WEBRTC -------------- _ICECandidateHandler: ", event.candidate);
-        this._signalingSession.sendMessage({'candidate': event.candidate});
+        this._signalingSession.sendMessage({candidate: event.candidate});
     }
 
     private _localDescCreated(desc: any) {  //TODO: create interface for desc
-        console.log("THIS -------------------------- _localDescCreated ", this);
+        console.log("THIS -------------------------- _localDescCreated this :", this);
+        console.log("THIS -------------------------- _localDescCreated desc :", desc);
         this.pc.setLocalDescription(desc)
-            .then(() => {let msg = {'sdp': this.pc.localDescription};console.log("msg ", msg); this._signalingSession.sendMessage(msg)})
+            .then(() => {let msg = {sdp: this.pc.localDescription}; 
+            console.log("Why is this msg fail? ", msg); 
+            this._signalingSession.sendMessage(msg)})
             .catch(onerror);
        } 
 
